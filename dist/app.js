@@ -15,8 +15,6 @@ var _morgan = _interopRequireDefault(require("morgan"));
 
 var _index = _interopRequireDefault(require("./routes/index"));
 
-var _users = _interopRequireDefault(require("./routes/users"));
-
 var _scrape = _interopRequireDefault(require("./routes/scrape"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30,8 +28,7 @@ app.use(_express.default.urlencoded({
 }));
 app.use((0, _cookieParser.default)());
 app.use(_express.default.static(_path.default.join(__dirname, "../public")));
-app.use("/", _index.default);
-app.use("/users", _users.default);
+app.use("/home", _index.default);
 app.use("/scrape", _scrape.default);
 var _default = app;
 exports.default = _default;
