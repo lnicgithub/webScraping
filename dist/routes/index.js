@@ -14,9 +14,7 @@ const router = _express.default.Router();
 
 
 router.get("/", (req, res, next) => {
-  res.render("scrape", {
-    title: "scrape"
-  });
+  res.send("index site");
 });
 var _default = router;
 exports.default = _default;

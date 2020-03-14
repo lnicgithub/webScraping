@@ -1,1 +1,4 @@
 node_modules/
+sh.exe.stackdump
+vscode.code-workspace
+.vscode

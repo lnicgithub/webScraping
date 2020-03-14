@@ -18,29 +18,11 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 const router = _express.default.Router();
+/* GET scrape values. */
 
-router.get("/", (req, res) => {
-  const url = "https://www.topcashback.co.uk/ebookers/";
 
-  _axios.default.get(url).then(response => {
-    const data = [];
-
-    const $ = _cheerio.default.load(response.data);
-
-    $("#ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl00_tdCol").each((i, elem) => {
-      data.push({
-        title: $(elem).text() //rate: $(elem).text()
-
-      });
-    }); //$(".cashback-desc");
-
-    res.send(data);
-  }).catch(error => {
-    console.log(error);
-    res.send("error retrieving cashback value");
-  });
-  /* GET users listing. */
-
+router.get("/", (req, res, next) => {
+  res.send("scrape site");
 });
 var _default = router;
 exports.default = _default;
