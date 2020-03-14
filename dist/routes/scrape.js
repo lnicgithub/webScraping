@@ -20,27 +20,36 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 const router = _express.default.Router();
 
 router.get("/", (req, res) => {
-  const url = "https://www.topcashback.co.uk/ebookers/";
+  const url = "https://www.topcashback.co.uk/ebookers/"; // const cssSelector =
+  // "#ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl00_lblCashbackDesc , #ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl00_lblTitle";
+
+  const css = "td";
 
   _axios.default.get(url).then(response => {
-    const data = [];
+    let data = [];
 
     const $ = _cheerio.default.load(response.data);
 
-    $("#ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl00_tdCol").each((i, elem) => {
-      data.push({
-        title: $(elem).text() //rate: $(elem).text()
-
-      });
-    }); //$(".cashback-desc");
-
-    res.send(data);
+    $(css).each(function (index, element) {
+      let cType = $(".gecko-small-text-wrap span").text;
+      let cRate = $(".cashback-desc").text;
+      data = +data[(cType, cRate)];
+    });
+    res.sendStatus(data);
   }).catch(error => {
     console.log(error);
-    res.send("error retrieving cashback value");
+    res.sendStatus("error retrieving cashback value");
   });
   /* GET users listing. */
 
 });
 var _default = router;
+/*       $("#ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl04_lblCashbackDesc , #ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl03_lblCashbackDesc , #ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl02_lblCashbackDesc , #ctl00_GeckoTwoColPrimary_merchantPnl_rMerchantOffers_ctl01_lblCashbackDesc").each((i, elem) => {
+        cashbackRateData.push({
+          cashback: $(elem).text()
+          //rate: $(elem).text()
+        });
+      }); */
+// const data = [...cashbackTypeData, ...cashbackRateData];
+
 exports.default = _default;
