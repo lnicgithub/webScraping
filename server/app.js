@@ -18,4 +18,5 @@ app.use("/scrape", scrapeRouter);
 module.export = app;
 app.listen(3000, () => {
   app.emit("listened", null);
+  console.log("Server started at: http://localhost:3000");
 });
