@@ -13,7 +13,7 @@
     "watch:dev": "nodemon --delay 1500ms",
     "lint": "eslint server; exit 0",
     "lint-fix": "eslint --fix --ext .js server; exit 0",
-    "test": "mocha scripts/testSetup.js server/**/*.test.js"
+    "test": "mocha --exit scripts/testSetup.js server/**/*.test.js"
   },
   "babel": {
     "presets": [
