@@ -6,7 +6,7 @@ buildctl build --frontend dockerfile.v0 \
             --local dockerfile=. \
             --local context=. \
             --exporter image \
-            --exporter-opt name=dockerhub/lnicdockerhub/app:test-build-amd64 \
+            --exporter-opt name=docker/lnicdockerhub/app:test-build-amd64 \
             --exporter-opt push=true \
             --frontend-opt platform=linux/amd64 \
             --frontend-opt filename=./Dockerfile
@@ -17,7 +17,7 @@ buildctl build --frontend dockerfile.v0 \
             --local dockerfile=. \
             --local context=. \
             --exporter image \
-            --exporter-opt name=dockerhub/lnicdockerhub/app:test-build-armhf \
+            --exporter-opt name=docker/lnicdockerhub/app:test-build-armhf \
             --exporter-opt push=true \
             --frontend-opt platform=linux/armhf \
             --frontend-opt filename=./Dockerfile
