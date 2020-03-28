@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+sh.exe.stackdump
+vscode.code-workspace
+.vscode
+dist
+_archived
