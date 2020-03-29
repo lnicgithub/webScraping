@@ -8,6 +8,7 @@ mkdir -vp ~/.docker/cli-plugins/ ~/dockercache
 curl --silent -L "https://github.com/docker/buildx/releases/download/${BUILDX_VER}/buildx-${BUILDX_VER}.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
 chmod a+x ~/.docker/cli-plugins/docker-buildx
 
+docker run --rm --privileged multiarch/qemu-user-static:register --reset -p
 docker buildx create --use
 docker buildx inspect --bootstrap
 docker buildx build --push \
