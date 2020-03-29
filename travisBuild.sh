@@ -19,7 +19,7 @@ buildctl build --frontend dockerfile.v0 \
             --exporter image \
             --exporter-opt name=lnicdockerhub/app:test-build-armhf \
             --exporter-opt push=true \
-            --frontend-opt platform=linux/armhf \
+            --frontend-opt platform=linux/arm64 \
             --frontend-opt filename=./Dockerfile
 
 
