@@ -1,8 +1,17 @@
-# Login into docker
-docker login --username $DOCKER_USER --password $DOCKER_PASSWORD
 export DOCKER_CLI_EXPERIMENTAL=enabled
+BUILDX_VER=v0.3.0
+IMAGE_NAME=lnicdockerhub/app
+VERSION=latest
+CI_NAME=travis
 
-docker buildx build --platform linux/arm/v7,linux/amd64 --push -t lnicdockerhub/app:multi_arch_latest .
+mkdir -vp ~/.docker/cli-plugins/ ~/dockercache
+curl --silent -L "https://github.com/docker/buildx/releases/download/${BUILDX_VER}/buildx-${BUILDX_VER}.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+chmod a+x ~/.docker/cli-plugins/docker-buildx
+docker buildx create --use
+docker buildx build --push \
+		--build-arg CI_NAME="travis" \
+		--platform linux/arm/v7,linux/arm64/v8,linux/386,linux/amd64 \
+		-t ${IMAGE_NAME}:${VERSION}-${CI_NAME} .
 
 # Build for amd64 and push
 # buildctl build --frontend dockerfile.v0 \
