@@ -9,6 +9,7 @@ curl --silent -L "https://github.com/docker/buildx/releases/download/${BUILDX_VE
 chmod a+x ~/.docker/cli-plugins/docker-buildx
 
 docker buildx create --use
+docker buildx inspect --bootstrap
 docker buildx build --push \
 		--build-arg CI_NAME=${CI_NAME} \
 		--platform linux/arm/v7,linux/arm64/v8,linux/386,linux/amd64 \
