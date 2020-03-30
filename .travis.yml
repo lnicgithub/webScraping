@@ -10,5 +10,5 @@ before_install:
 script:
  - npm test
 after_success:
- - npm run build
+ - npm run prod-build
  - bash ./travisBuild.sh
