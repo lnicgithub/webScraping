@@ -9,4 +9,5 @@ before_script:
 before_install:
 script:
  - npm test
+after_success:
  - bash ./travisBuild.sh
