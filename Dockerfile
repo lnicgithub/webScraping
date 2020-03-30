@@ -12,6 +12,8 @@ COPY . .
 
 RUN npm install && npm run prod-build
 
+# Expose 3000 and then map at runtime to a different port
+# docker run -p 8080:3000 -d lnicdockerhub/app:latest-travis
 EXPOSE 3000
 
 CMD [ "node", "dist/app" ]
