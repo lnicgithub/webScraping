@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 # A wildcard is used to ensure both package and lock is copied
 COPY package*.json ./
 
-RUN npm run prod
+RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
