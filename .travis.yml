@@ -7,20 +7,6 @@ services:
 before_script:
  - npm install
 before_install:
- - sudo rm -rf /var/lib/apt/lists/*
- - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
- - lsb_release -cs
- - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
- - sudo apt-get update
- - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 script:
  - npm test
-after_success:
- - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
- - docker version
  - bash ./travisBuild.sh
-  #- docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
- #- docker tag app $DOCKER_USER/app:$TRAVIS_BUILD_NUMBER
- #- docker push $DOCKER_USER/app:$TRAVIS_BUILD_NUMBER
- #- docker tag app $DOCKER_USER/app:latest
- #- docker push $DOCKER_USER/app:latest
