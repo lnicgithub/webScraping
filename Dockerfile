@@ -12,6 +12,6 @@ COPY . .
 
 RUN npm install && npm run prod-build
 
-EXPOSE 8080
+EXPOSE 3000
 
 CMD [ "node", "dist/app" ]
