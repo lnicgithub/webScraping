@@ -7,10 +7,10 @@ WORKDIR /usr/src/app
 # A wildcard is used to ensure both package and lock is copied
 COPY package*.json ./
 
-RUN npm install && npm run prod-build
-
 # Bundle app source
 COPY . .
+
+RUN npm install && npm run prod-build
 
 EXPOSE 8080
 
