@@ -5,3 +5,15 @@ vscode.code-workspace
 .vscode
 dist
 _archived
+Dockerfile*
+docker-compose*
+.dockerignore
+.git
+.gitignore
+README.md
+LICENSE
+.vscode
+travisBuild.sh
+.editorconfig
+.eslintignore
+.eslintrc.json
