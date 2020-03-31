@@ -1,3 +1,5 @@
+# TravisBuild script
+
 # context form https://nexus.eddiesinentropy.net/2020/01/12/Building-Multi-architecture-Docker-Images-With-Buildx/
 
 # set some parameters for Docker. Platforms must be space delimited.
