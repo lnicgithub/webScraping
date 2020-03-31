@@ -4,7 +4,7 @@
 IMAGE_NAME=lnicdockerhub/app
 VERSION=latest
 CI_NAME=travis
-export DOCKER_PLATFORMS='linux/amd64'
+export DOCKER_PLATFORMS='linux/amd64'B
 DOCKER_PLATFORMS+=' linux/arm/v6'
 
 # Setup BuildX Environment. Using Ubuntu as it is multi arch so we can build differnt platforms
