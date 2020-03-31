@@ -6,8 +6,9 @@ services:
  - "docker"
 before_script:
  - npm install
-before_install:
 script:
  - npm test
 after_success:
- - bash ./travisBuild.sh
+ - if [[ $TRAVIS_BRANCH = "master" ]]; then
+     bash ./travisBuild.sh
+   fi
