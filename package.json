@@ -10,6 +10,7 @@
     "build": "npm-run-all clean transpile",
     "dev": "NODE_ENV=development npm-run-all build server",
     "prod": "NODE_ENV=production npm-run-all lint build server",
+    "prod-build" : "NODE_ENV=production npm-run-all lint build",
     "watch:dev": "nodemon --delay 1500ms",
     "lint": "eslint server; exit 0",
     "lint-fix": "eslint --fix --ext .js server; exit 0",
@@ -50,6 +51,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "request": "^2.88.2",
+    "rimraf": "^3.0.2",
     "request-promise": "^4.2.5"
   },
   "devDependencies": {
@@ -65,7 +67,6 @@
     "eslint-plugin-prettier": "^3.1.2",
     "mocha": "^7.1.0",
     "nodemon": "^2.0.2",
-    "rimraf": "^3.0.2",
     "supertest": "^4.0.2"
   }
 }
