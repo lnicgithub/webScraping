@@ -9,7 +9,10 @@ before_script:
 script:
  - npm test
 after_success:
+ - echo $TRAVIS_COMMIT
+ - echo $TRAVIS_TAG
  - echo $TRAVIS_BRANCH
- - if [[ $TRAVIS_BRANCH = "master" ]];
+ - echo $TRAVIS_PULL_REQUEST
+ - if [ $TRAVIS_BRANCH = "master" ];
    then bash ./travisBuild.sh;
    fi
