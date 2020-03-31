@@ -1,10 +1,12 @@
+# TravisBuild script
+
 # context form https://nexus.eddiesinentropy.net/2020/01/12/Building-Multi-architecture-Docker-Images-With-Buildx/
 
 # set some parameters for Docker. Platforms must be space delimited.
 IMAGE_NAME=lnicdockerhub/app
 VERSION=latest
 CI_NAME=travis
-export DOCKER_PLATFORMS='linux/amd64'B
+export DOCKER_PLATFORMS='linux/amd64'
 DOCKER_PLATFORMS+=' linux/arm/v6'
 
 # Setup BuildX Environment. Using Ubuntu as it is multi arch so we can build differnt platforms
