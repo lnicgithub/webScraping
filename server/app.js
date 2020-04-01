@@ -14,9 +14,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/home", indexRouter);
 app.use("/scrape", scrapeRouter);
-
+app.set("port", process.env.PORT || 3000);
 module.export = app;
-app.listen(3000, () => {
+app.listen(app.get("port"), () => {
   app.emit("listened", null);
-  console.log("Server started at: http://localhost:3000");
+  console.log(`Server started at: http://localhost:${app.get("port")}`);
 });

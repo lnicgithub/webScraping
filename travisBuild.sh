@@ -3,7 +3,7 @@
 # context form https://nexus.eddiesinentropy.net/2020/01/12/Building-Multi-architecture-Docker-Images-With-Buildx/
 
 # set some parameters for Docker. Platforms must be space delimited.
-IMAGE_NAME=lnicdockerhub/app
+IMAGE_NAME='lnicdockerhub/app'
 VERSION=latest
 CI_NAME=travis
 export DOCKER_PLATFORMS='linux/amd64'
@@ -51,4 +51,15 @@ docker buildx build \
     .
 
 
-
+# Heroku Deploy
+# install heroku CLI
+curl https://cli-assets.heroku.com/install.sh | sh
+sudo systemctl restart docker
+docker login -u "$HEROKU_USER" -p "$HEROKU_PASSWORD" registry.heroku.com
+echo ${IMAGE_NAME}
+echo ${VERSION}
+echo ${CI_NAME}
+echo $HEROKU_APP_NAME
+docker tag ${IMAGE_NAME}:${VERSION}-${CI_NAME} registry.heroku.com/$HEROKU_APP_NAME/web
+docker push registry.heroku.com/$HEROKU_APP_NAME/web
+/usr/local/bin/heroku container:release web --app $HEROKU_APP_NAME
