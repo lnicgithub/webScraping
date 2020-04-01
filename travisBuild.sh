@@ -56,7 +56,7 @@ docker buildx build \
 curl https://cli-assets.heroku.com/install.sh | sh
 echo "restarting docker..."
 sudo systemctl restart docker
-docker login -u "$HEROKU_USER" -p "$HEROKU_PASSWORD" registry.heroku.com
+docker login --username=_ --password="$HEROKU_API_KEY" registry.heroku.com
 echo ${IMAGE_NAME}
 echo ${VERSION}
 echo ${CI_NAME}
