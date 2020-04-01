@@ -61,6 +61,6 @@ echo ${IMAGE_NAME}
 echo ${VERSION}
 echo ${CI_NAME}
 echo $HEROKU_APP_NAME
-docker tag ${IMAGE_NAME}:${VERSION}-${CI_NAME} registry.heroku.com/$HEROKU_APP_NAME/web
+docker tag ${IMAGE_NAME} registry.heroku.com/$HEROKU_APP_NAME/web
 docker push registry.heroku.com/$HEROKU_APP_NAME/web
 /usr/local/bin/heroku container:release web --app $HEROKU_APP_NAME
