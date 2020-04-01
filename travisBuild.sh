@@ -4,7 +4,6 @@
 
 # set some parameters for Docker. Platforms must be space delimited.
 IMAGE_NAME='lnicdockerhub/app'
-HEROKUIMAGE='lnicdockerhub/app'
 VERSION=latest
 CI_NAME=travis
 export DOCKER_PLATFORMS='linux/amd64'
@@ -60,6 +59,6 @@ echo ${IMAGE_NAME}
 echo ${VERSION}
 echo ${CI_NAME}
 echo $HEROKU_APP_NAME
-docker tag ${HEROKUIMAGE}:${VERSION}-${CI_NAME} registry.heroku.com/$HEROKU_APP_NAME/web
+docker tag "lnicdockerhub/app:latest-travis" registry.heroku.com/$HEROKU_APP_NAME/web
 docker push registry.heroku.com/$HEROKU_APP_NAME/web
 /usr/local/bin/heroku container:release web --app $HEROKU_APP_NAME
