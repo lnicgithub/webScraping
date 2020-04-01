@@ -1,4 +1,4 @@
-# TravisBuild script
+# TravisBuild script for building multi arch docker images and deploying them to Heroku
 
 # context form https://nexus.eddiesinentropy.net/2020/01/12/Building-Multi-architecture-Docker-Images-With-Buildx/
 
@@ -50,16 +50,21 @@ docker buildx build \
     -t ${IMAGE_NAME}:${VERSION}-${CI_NAME} \
     .
 
-
 # Heroku Deploy
 # install heroku CLI
 curl https://cli-assets.heroku.com/install.sh | sh
+
+#Login to Heroku private docker registry
 docker login --username=_ --password="$HEROKU_API_KEY" registry.heroku.com
+
+#Pull our image we built earlier to the local travis env.
 docker pull ${IMAGE_NAME}:${VERSION}-${CI_NAME}
-echo ${IMAGE_NAME}
-echo ${VERSION}
-echo ${CI_NAME}
-echo $HEROKU_APP_NAME
+
+#Tag the local image to Heroku
 docker tag ${IMAGE_NAME}:${VERSION}-${CI_NAME} registry.heroku.com/$HEROKU_APP_NAME/web
+
+#Push it to Heroku
 docker push registry.heroku.com/$HEROKU_APP_NAME/web
+
+#Release to Heroku
 /usr/local/bin/heroku container:release web --app $HEROKU_APP_NAME
