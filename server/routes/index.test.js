@@ -1,4 +1,3 @@
-
 const supertest = require("supertest");
 const server = require("../app.js");
 
@@ -12,7 +11,7 @@ describe("GET root dir", function() {
     supertest("http://localhost:3000")
       .get("/")
       .expect(200)
-      .end(function(err, res){
+      .end(function(err, res) {
         if (err) done(err);
         done();
       });
@@ -24,7 +23,19 @@ describe("GET scrape dir", function() {
     supertest("http://localhost:3000")
       .get("/scrape")
       .expect(200)
-      .end(function(err, res){
+      .end(function(err, res) {
+        if (err) done(err);
+        done();
+      });
+  });
+});
+
+describe("GET bookingcom dir", function() {
+  it("it should has status code 200", function(done) {
+    supertest("http://localhost:3000")
+      .get("/bookingcom")
+      .expect(200)
+      .end(function(err, res) {
         if (err) done(err);
         done();
       });
