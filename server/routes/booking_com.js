@@ -57,7 +57,10 @@ router.get("/search", (req, res) => {
   function run(url) {
     return new Promise(async (resolve, reject) => {
       try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+          executablePath: process.env.CHROMIUM_PATH,
+          args: ["--no-sandbox"]
+        });
         const page = await browser.newPage();
         await page.goto(url);
 
@@ -159,7 +162,10 @@ router.get("/hotel", (req, res) => {
 
       const roomResults = await new Promise(async (resolve, reject) => {
         try {
-          const browser = await puppeteer.launch();
+          const browser = await puppeteer.launch({
+            executablePath: process.env.CHROMIUM_PATH,
+            args: ["--no-sandbox"]
+          });
           const page = await browser.newPage();
           const requestTimestamp = moment().valueOf();
           await page.goto(searchUrl);
