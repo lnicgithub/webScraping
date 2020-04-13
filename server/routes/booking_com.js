@@ -140,23 +140,6 @@ router.get("/hotel", (req, res) => {
     .replace(/\s+/g, "")
     .toLowerCase();
 
-  /*   function findResults(hotelName, fromDate, toDate) {
-    dataStore
-      .find({
-        hotelName: `${hotelName}`,
-        toDate: `${toDate}`,
-        fromDate: `${fromDate}`
-      })
-      .sort({ hotelName: 1 })
-      .exec(function(err, docs) {
-        const results = [];
-        docs.forEach(function(rooms) {
-          results.push({ rooms });
-        });
-        return results;
-      });
-  } */
-
   // query the database for entries beforce attempting to scrape
   dataStore.find(
     {
@@ -167,12 +150,10 @@ router.get("/hotel", (req, res) => {
     { hotelId: 1, hotelName: 1, roomId: 1, roomName: 1, currency: 1, price: 1 },
     async function(err, results) {
       if (err) {
-        console.log("err");
         return res.json({ message: "Error", error: `${err}` });
       }
 
       if (Array.isArray(results) && results.length) {
-        console.log("found some docs");
         return res.json({ url: searchUrl, results });
       }
 
