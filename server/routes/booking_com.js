@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
 import express from "express";
-import moment from "moment";
+import moment, { now } from "moment";
 import puppeteer from "puppeteer";
+import dataStore from "../models/dbModel";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get("/search", (req, res) => {
   // capture query params
   let { location, country, from_date, to_date } = req.query;
   location = nullCheck(location) === "" ? "London" : location;
-  country = nullCheck(country) === "" ? "GB" : country;
+  country = nullCheck(country) === "" ? "gb" : country;
   from_date =
     nullCheck(from_date) === ""
       ? moment()
@@ -49,8 +50,9 @@ router.get("/search", (req, res) => {
                     &checkout_month=${to_date_obj.format("M")}
                     &checkout_monthday=${to_date_obj.format("D")}
                     &ss=${location.replace(/\s+/g, "+")}+${country}
-  `.replace(/\s+/g, "");
-  console.log(searchUrl);
+  `
+    .replace(/\s+/g, "")
+    .toLowerCase();
   // use puppeteer to pull html back
   function run(url) {
     return new Promise(async (resolve, reject) => {
@@ -90,15 +92,15 @@ router.get("/search", (req, res) => {
   }
 
   run(searchUrl)
-    .then(result => {
-      if (JSON.stringify(result) !== "[]") {
-        res.json(result);
+    .then(results => {
+      if (JSON.stringify(results) !== "[]") {
+        res.json({ url: `${searchUrl}`, results });
       } else {
-        res.json("No Results");
+        res.json({ message: "No Results" });
       }
     })
     .catch(reject => {
-      res.json(`unable to retrieve data - ${reject}`);
+      res.json({ message: "Error", error: `${reject}` });
     });
 });
 
@@ -126,6 +128,7 @@ router.get("/hotel", (req, res) => {
       : to_date;
 
   // convert date strings to moment.js objects
+
   const from_date_obj = moment(from_date, "DD-MM-YYYY");
   const to_date_obj = moment(to_date, "DD-MM-YYYY");
 
@@ -133,55 +136,103 @@ router.get("/hotel", (req, res) => {
   const searchUrl = `https://m.booking.com/hotel/${country}/${hotelname}.en-gb.html?
                     checkin=${from_date_obj.format("YYYY-MM-DD")}
                     &checkout=${to_date_obj.format("YYYY-MM-DD")}
-                    `.replace(/\s+/g, "");
+                    `
+    .replace(/\s+/g, "")
+    .toLowerCase();
 
-  // use puppeteer to pull html back
-  function run(url) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url);
-
-        const urls = await page.evaluate(() => {
-          const hotelRooms = [];
-          const rooms = document.querySelectorAll(
-            `[data-room-id][data-block-id]`
-          );
-          // once we have the room div cards, we can now iterate through them
-          if (rooms !== null) {
-            rooms.forEach(room => {
-              hotelRooms.push({
-                room: room.querySelector(`span.room__title-text`).innerText,
-                price: room.querySelector(
-                  `div.mpc-inline-block-maker-helper > div`
-                ).innerText
-              });
-            });
-          }
-          // return the array if it has results or not.
-          return hotelRooms;
+  /*   function findResults(hotelName, fromDate, toDate) {
+    dataStore
+      .find({
+        hotelName: `${hotelName}`,
+        toDate: `${toDate}`,
+        fromDate: `${fromDate}`
+      })
+      .sort({ hotelName: 1 })
+      .exec(function(err, docs) {
+        const results = [];
+        docs.forEach(function(rooms) {
+          results.push({ rooms });
         });
+        return results;
+      });
+  } */
 
-        browser.close();
-        return resolve(urls);
-      } catch (e) {
-        return reject(e);
+  // query the database for entries beforce attempting to scrape
+  dataStore.find(
+    {
+      hotelName: `${hotelname}`,
+      toDate: `${to_date_obj.format("YYYY-MM-DD")}`,
+      fromDate: `${from_date_obj.format("YYYY-MM-DD")}`
+    },
+    { hotelId: 1, hotelName: 1, roomId: 1, roomName: 1, currency: 1, price: 1 },
+    async function(err, results) {
+      if (err) {
+        console.log("err");
+        return res.json({ message: "Error", error: `${err}` });
       }
-    });
-  }
 
-  run(searchUrl)
-    .then(results => {
-      if (JSON.stringify(results) !== "[]") {
-        res.json({ url: `${searchUrl}`, results });
-      } else {
-        res.json({ message: "No Results" });
+      if (Array.isArray(results) && results.length) {
+        console.log("found some docs");
+        return res.json({ url: searchUrl, results });
       }
-    })
-    .catch(reject => {
-      res.json({ message: "Error", error: `${reject}` });
-    });
+
+      const roomResults = await new Promise(async (resolve, reject) => {
+        try {
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+          const requestTimestamp = moment().valueOf();
+          await page.goto(searchUrl);
+
+          const urls = await page.evaluate(
+            (fromDate, toDate, hotelName, timeStamp) => {
+              const hotelRooms = [];
+              const rooms = document.querySelectorAll(
+                `[data-room-id][data-block-id]`
+              );
+              // once we have the room div cards, we can now iterate through them
+              if (rooms !== null) {
+                rooms.forEach(room => {
+                  hotelRooms.push({
+                    hotelId: `${hotelName}`,
+                    hotelName: `${hotelName}`,
+                    roomId: `${room.getAttribute("data-block-id")}`,
+                    roomName: room.querySelector(`span.room__title-text`)
+                      .innerText,
+                    fromDate: `${fromDate}`,
+                    toDate: `${toDate}`,
+                    currency: room
+                      .querySelector(`div.mpc-inline-block-maker-helper > div`)
+                      .innerText.replace(/[a-z0-9]/g, ""),
+                    price: room
+                      .querySelector(`div.mpc-inline-block-maker-helper > div`)
+                      .innerText.replace(/[^0-9]/g, ""),
+                    requestTimestamp: `${timeStamp}`
+                  });
+                });
+              }
+              return hotelRooms;
+            },
+            from_date_obj.format("YYYY-MM-DD"),
+            to_date_obj.format("YYYY-MM-DD"),
+            hotelname,
+            requestTimestamp
+          );
+
+          browser.close();
+          // insert newly scraped rows into database
+          urls.forEach(res => {
+            dataStore.insert(res);
+          });
+          // return results to calling function
+          return resolve(urls);
+        } catch (e) {
+          return reject(e);
+        }
+      });
+      // output results from the scraping.
+      return res.json({ url: searchUrl, roomResults });
+    }
+  );
 });
 
 export default router;
