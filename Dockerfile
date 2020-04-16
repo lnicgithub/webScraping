@@ -10,10 +10,10 @@ COPY package*.json ./
 # Bundle app source
 COPY . .
 
-RUN apt install chromium-browser chromium-codecs-ffmpeg -y
-RUN apt-get --fix-broken install
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-ENV CHROMIUM_PATH /usr/bin/chromium-browser
+# RUN apt install chromium-browser chromium-codecs-ffmpeg -y
+# RUN apt-get --fix-broken install
+# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+# ENV CHROMIUM_PATH /usr/bin/chromium-browser
 
 RUN npm install && npm run prod-build
 
