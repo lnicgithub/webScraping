@@ -1,3 +1,4 @@
+# changed to slim for debug
 FROM node:lts-slim
 
 # Create app directory
