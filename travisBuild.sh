@@ -42,11 +42,22 @@ docker buildx inspect --bootstrap
 docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
 
 # Run docker buildx passing in the platforms.
+# AMD64 Build
 docker buildx build \
-    --platform "${DOCKER_PLATFORMS// /,}" \
+    --platform "linux/amd64" \
     --push \
     --progress plain \
-    -f Dockerfile \
+    -f Dockerfile_amd64 \
+    -t ${IMAGE_NAME}:${VERSION}-${CI_NAME} \
+    .
+
+# Run docker buildx passing in the platforms.
+# Arm32v7 (armv6) Build
+docker buildx build \
+    --platform "linux/arm/v6" \
+    --push \
+    --progress plain \
+    -f Dockerfile_arm32v7 \
     -t ${IMAGE_NAME}:${VERSION}-${CI_NAME} \
     .
 
