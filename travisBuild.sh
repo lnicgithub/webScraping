@@ -66,7 +66,6 @@ docker buildx build \
 docker manifest create ${IMAGE_NAME}:${VERSION}-multiarch \
 ${IMAGE_NAME}:${VERSION}-amd64-${CI_NAME} \
 ${IMAGE_NAME}:${VERSION}-armhf-${CI_NAME} \
-docker manifest annotate ${IMAGE_NAME}:${VERSION}-multiarch ${IMAGE_NAME}:${VERSION}-armhf-${CI_NAME} --os linux --arch arm
 docker manifest push ${IMAGE_NAME}:${VERSION}-multiarch
 
 # Heroku Deploy
@@ -77,10 +76,10 @@ curl https://cli-assets.heroku.com/install.sh | sh
 docker login --username=_ --password="$HEROKU_API_KEY" registry.heroku.com
 
 #Pull our image we built earlier to the local travis env.
-docker pull ${IMAGE_NAME}:${VERSION}-${CI_NAME}
+docker pull ${IMAGE_NAME}:${VERSION}-multiarch
 
 #Tag the local image to Heroku
-docker tag ${IMAGE_NAME}:${VERSION}-${CI_NAME} registry.heroku.com/$HEROKU_APP_NAME/web
+docker tag ${IMAGE_NAME}:${VERSION}-multiarch registry.heroku.com/$HEROKU_APP_NAME/web
 
 #Push it to Heroku
 docker push registry.heroku.com/$HEROKU_APP_NAME/web
