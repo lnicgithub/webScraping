@@ -48,18 +48,23 @@ docker buildx build \
     --push \
     --progress plain \
     -f Dockerfile_amd64 \
-    -t ${IMAGE_NAME}:${VERSION}-${CI_NAME} \
+    -t ${IMAGE_NAME}:${VERSION}-amd64-${CI_NAME} \
     .
 
 # Run docker buildx passing in the platforms.
-# Arm32v7 (armv6) Build
+# ARMhf Build
 docker buildx build \
     --platform "linux/arm/v6" \
     --push \
     --progress plain \
-    -f Dockerfile_arm32v7 \
-    -t ${IMAGE_NAME}:${VERSION}-${CI_NAME} \
+    -f Dockerfile_armhf \
+    -t ${IMAGE_NAME}:${VERSION}-armhf-${CI_NAME} \
     .
+
+# Create Docker manifest to allow docker to decide which image is suited
+# to the arch of the hardware requesting
+# docker manifest create ${IMAGE_NAME}:${VERSION}-multiarch
+# ${IMAGE_NAME}:${VERSION}-armhf-${CI_NAME}
 
 # Heroku Deploy
 # install heroku CLI
