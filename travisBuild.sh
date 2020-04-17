@@ -63,8 +63,11 @@ docker buildx build \
 
 # Create Docker manifest to allow docker to decide which image is suited
 # to the arch of the hardware requesting
-# docker manifest create ${IMAGE_NAME}:${VERSION}-multiarch
-# ${IMAGE_NAME}:${VERSION}-armhf-${CI_NAME}
+docker manifest create ${IMAGE_NAME}:${VERSION}-multiarch \
+${IMAGE_NAME}:${VERSION}-amd64-${CI_NAME} \
+${IMAGE_NAME}:${VERSION}-armhf-${CI_NAME} \
+docker manifest annotate ${IMAGE_NAME}:${VERSION}-multiarch ${IMAGE_NAME}:${VERSION}-armhf-${CI_NAME} --os linux --arch arm
+docker manifest push ${IMAGE_NAME}:${VERSION}-multiarch
 
 # Heroku Deploy
 # install heroku CLI
