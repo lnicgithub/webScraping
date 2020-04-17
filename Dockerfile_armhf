@@ -1,6 +1,7 @@
 # changed to slim for debug
 FROM arm32v7/node:lts-slim
 
+RUN mkdir -p /usr/src/app
 # Create app directory
 WORKDIR /usr/src/app
 
