@@ -26,7 +26,7 @@ COPY . .
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 ENV CHROME_BIN="/usr/bin/chromium-browser"
 
-RUN "/node-v10.16.1-linux-armv6l/bin/npm" install && "/node-v10.16.1-linux-armv6l/bin/npm" run prod-build
+RUN npm install && npm run prod-build
 
 # Expose 3000 and then map at runtime to a different port
 # docker run -p 8080:3000 -d lnicdockerhub/app:latest-travis
