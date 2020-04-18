@@ -4,6 +4,8 @@ FROM raspbian/stretch
 RUN apt-get update -y
 RUN wget https://nodejs.org/dist/latest-dubnium/node-v10.20.1-linux-armv6l.tar.xz
 RUN tar -xJf node-v10.20.1-linux-armv6l.tar.xz
+
+RUN apt-get install rsync -y
 RUN rsync -av /node-v10.20.1-linux-armv6l/* /usr/local/
 
 RUN apt-get update
@@ -31,4 +33,4 @@ RUN npm install && npm run prod-build
 # docker run -p 8080:3000 -d lnicdockerhub/app:latest-travis
 EXPOSE 3000
 
-CMD [ "/node-v10.16.1-linux-armv6l/bin/node", "dist/app" ]
+CMD [ "node", "dist/app" ]
