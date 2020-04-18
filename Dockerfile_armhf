@@ -4,10 +4,9 @@ FROM raspbian/stretch
 RUN apt-get update -y
 RUN wget https://nodejs.org/dist/latest-dubnium/node-v10.20.1-linux-armv6l.tar.xz
 RUN tar -xJf node-v10.20.1-linux-armv6l.tar.xz
-RUN cd node-v10.20.1-linux-armv6l/
-RUN cp -R * /usr/local/
+RUN export PATH=$PATH:/node-v10.20.1-linux-armv6l
 
-RUN apy-get update
+RUN apt-get update
 RUN apt install chromium_browser chromium_codecs_ffmpeg -y
 RUN apt-get --fix-broken install
 
