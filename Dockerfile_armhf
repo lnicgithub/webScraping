@@ -5,9 +5,11 @@ RUN apt-get update -y
 RUN wget https://nodejs.org/dist/latest-dubnium/node-v10.20.1-linux-armv6l.tar.xz
 RUN tar -xJf node-v10.20.1-linux-armv6l.tar.xz
 RUN export PATH=$PATH:/node-v10.20.1-linux-armv6l
+RUN node --version
+RUN npm --version
 
 RUN apt-get update
-RUN apt install chromium_browser chromium_codecs_ffmpeg -y
+RUN apt-get install chromium-browser chromium-codecs-ffmpeg -y
 RUN apt-get --fix-broken install
 
 
