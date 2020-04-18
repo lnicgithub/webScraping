@@ -1,5 +1,5 @@
 # changed to slim for debug
-FROM arm32v7/node:lts-slim
+FROM node:lts-alpine
 
 RUN mkdir -p /usr/src/app
 # Create app directory
