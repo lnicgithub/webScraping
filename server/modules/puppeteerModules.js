@@ -13,7 +13,7 @@ async function getChromeInstance() {
     await puppeteer
       .launch({
         headless: true,
-        executablePath: process.env.CHROME_BIN,
+        executablePath: `${global.chromePath}`,
         args: [`${chromeArgs}`]
       })
       .then(resolve => {
@@ -39,7 +39,6 @@ async function getBookingRooms(
                     &checkout=${toDate}`
       .replace(/\s+/g, "")
       .toLowerCase();
-      console.log(searchUrl);
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
     await page.goto(searchUrl, {
@@ -61,10 +60,12 @@ async function getBookingRooms(
             toDate: `${toDate}`,
             currency: room
               .querySelector(`div.mpc-inline-block-maker-helper > div`)
-              .innerText.replace(/[a-z0-9]/g, ""),
+              .innerText.replace(/[a-z0-9]/g, "")
+              .substring(0, 1),
             price: room
               .querySelector(`div.mpc-inline-block-maker-helper > div`)
               .innerText.replace(/[^0-9]/g, ""),
+            country: `${country}`,
             requestTimestamp: timestamp
           });
         });
@@ -80,7 +81,6 @@ async function getBookingRooms(
     if (Array.isArray(records) && records.length >= 1) {
       // insert into DB
       records.forEach(room => {
-        console.log(room);
         insertRecs(room);
       });
     }

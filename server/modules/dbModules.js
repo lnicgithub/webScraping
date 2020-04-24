@@ -14,6 +14,8 @@ async function findRecs(json) {
     roomName: 1,
     currency: 1,
     price: 1,
+    country: 1,
+    requestTimestamp: 1,
     _id: 0
   });
   return results;

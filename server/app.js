@@ -16,6 +16,7 @@ app.use("/index", indexRouter);
 app.use("/scrape", scrapeRouter);
 app.set("port", process.env.PORT || 3000);
 app.set("chromePath", process.env.CHROME_BIN || "");
+global.chromePath = app.get("chromePath");
 module.export = app;
 app.listen(app.get("port"), () => {
   app.emit("listened", null);

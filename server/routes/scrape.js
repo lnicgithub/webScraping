@@ -1,9 +1,9 @@
 import express from "express";
 import moment from "moment";
-import { getChromeInstance, getBookingRooms } from "../models/puppeteerModules";
-import { dataStore, findRecs, insertRecs } from "../models/dbModules";
-import queue from "../models/queueModules";
-import nullCheck from "../models/dataModules";
+import { getChromeInstance, getBookingRooms } from "../modules/puppeteerModules";
+import { dataStore, findRecs, insertRecs } from "../modules/dbModules";
+import queue from "../modules/queueModules";
+import nullCheck from "../modules/dataModules";
 
 const router = express.Router();
 
@@ -35,12 +35,13 @@ router.get("/hotel", (req, res) => {
   const toDate = moment(to_date, "DD-MM-YYYY");
 
   (async function run() {
-    if (hotelname) {
+    if (hotelname && country && from_date && to_date) {
       // find recs if exist
       const dbResults = await findRecs({
         hotelName: `${hotelname}`,
         fromDate: `${fromDate.format("YYYY-MM-DD")}`,
         toDate: `${toDate.format("YYYY-MM-DD")}`,
+        country: `${country}`,
         requestTimestamp: {
           $gte: moment()
             .subtract(1, "hours")
@@ -49,6 +50,12 @@ router.get("/hotel", (req, res) => {
       });
       // if results exist, return those to caller
       if (Array.isArray(dbResults) && dbResults.length >= 1) {
+        dbResults.forEach(item => {
+          const now = moment(moment().valueOf());
+          item.requestTimestamp = `${moment
+            .duration(now.diff(item.requestTimestamp))
+            .humanize()} ago`;
+          });
         return res.json(dbResults);
       }
       queue.add(async () =>
