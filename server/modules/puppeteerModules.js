@@ -5,23 +5,23 @@ let browserWSEndpoint = null;
 
 async function getChromeInstance() {
   if (!browserWSEndpoint) {
-    console.log("no browser session");
-    const chromeArgs = [];
-    chromeArgs.push("'--disable-webgl'");
+    let chromeArgs = [];
     if (process.platform === "linux") {
-      chromeArgs.push("'--no-sandbox'");
-      chromeArgs.push("'--disable-dev-shm-usage'");
+      chromeArgs = ["--no-sandbox", "--disable-dev-shm-usage"];
     }
-    await puppeteer
-      .launch({
-        headless: true,
-        executablePath: `${global.chromePath}`,
-        args: [chromeArgs.toString()]
-      })
-      .then(resolve => {
-        browserWSEndpoint = resolve.wsEndpoint();
-      });
+
+    const launchArgs = {
+      args: [...(chromeArgs || [])],
+      executablePath: `${global.chromePath}`,
+      headless: true
+    };
+
+    console.log(chromeArgs.toString());
+    await puppeteer.launch(launchArgs).then(resolve => {
+      browserWSEndpoint = resolve.wsEndpoint();
+    });
   }
+  console.log(puppeteer);
   return browserWSEndpoint;
 }
 
