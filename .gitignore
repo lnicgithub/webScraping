@@ -3,4 +3,6 @@ sh.exe.stackdump
 vscode.code-workspace
 .vscode
 dist/
+dist/*
 _archived/
+datafile.db
