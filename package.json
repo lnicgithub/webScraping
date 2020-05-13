@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run prod",
+    "serverDebug": "node --inspect-brk=9229 ./dist/app",
     "server": "node ./dist/app",
     "transpile": "babel ./server --out-dir=dist --source-maps",
     "clean": "rimraf dist",
@@ -41,8 +42,6 @@
     ]
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "better-queue": "^3.8.10",
     "cheerio": "^1.0.0-rc.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
